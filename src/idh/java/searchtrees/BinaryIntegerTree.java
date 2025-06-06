@@ -70,12 +70,20 @@ public class BinaryIntegerTree {
 		 **/
 		public boolean delete(int value) {
 			//TODO: Implement
-			if(this.contains(value)==true) { //check if tree even contains said value
+			if(this.contains(value)==true) { //check if tree even contains said value in the first place
+//					Target node has 0 children
 				if(value==right.value && right.right==null && right.left==null) {
-					this.right=null;
+					this.right = null;
+					return true;
+				} else {
+					right.delete(value);
 				}if(value==left.value && left.right == null && left.left == null) {
-					this.left= null;
+					this.left = null;
+					return true;
+				}else {
+					left.delete(value);
 				}
+//TODO:				Target node has 1 child
 			}		
 			return false;
 		}
