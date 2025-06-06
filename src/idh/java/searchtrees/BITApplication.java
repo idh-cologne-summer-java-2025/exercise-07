@@ -3,7 +3,7 @@ package idh.java.searchtrees;
 public class BITApplication {
 
 	public static void main(String[] args) {
-
+		//Class not found exception when executing main-method
 		// Wie gehabt Binärbaum anlegen und füllen
 		BinaryIntegerTree bit = new BinaryIntegerTree();
 		bit.addValue(5);

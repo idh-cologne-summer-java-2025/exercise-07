@@ -63,9 +63,20 @@ public class BinaryIntegerTree {
                 return (right != null) && right.contains(searchValue);
             }
         }
-		
+		 /** First, check if the tree even contains the value.
+		 * Traverse the Tree node by node, until value is found:
+		 * On each node: value < node -> go left -> repeat | value > node -> go right -> repeat
+		 * On targetNode: no child -> targetNode = null | 1 child -> targetNode = child | 2 children -> targetNode compare -> targetNode = biggerCild
+		 **/
 		public boolean delete(int value) {
 			//TODO: Implement
+			if(this.contains(value)==true) { //check if tree even contains said value
+				if(value==right.value && right.right==null && right.left==null) {
+					this.right=null;
+				}if(value==left.value && left.right == null && left.left == null) {
+					this.left= null;
+				}
+			}		
 			return false;
 		}
 	}
@@ -105,14 +116,14 @@ public class BinaryIntegerTree {
 	 * Überprüft, ob der spezifizierte Wert enthalten ist.
 	 */
 	public boolean contains(int value) {
-        return root != null && root.contains(value);
+        return root != null && root.contains(value);//but what does .contain by itself do?
     }
 	
 	
 	/**
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
-	public boolean delete(int value) {
+	public boolean delete(int value) { //Why does the BIT itself also possess a delete method that is supposed to delete a single value?
 		//TODO: Implement
 		return false;
 	}
