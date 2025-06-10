@@ -13,22 +13,17 @@ public class BITApplication {
         bit.addValue(2);
         bit.addValue(1);
 
-        // Ausgabe des Baums in sortierter Reihenfolge
         System.out.print("Initialer Baum: ");
         bit.printInOrder();
 
-        // Test: Enthält 7?
         System.out.println("Enthält 7? " + bit.contains(7)); // true
 
-        // Lösche 7
         System.out.println("Lösche 7...");
         bit.delete(7);
         System.out.println("Enthält 7? " + bit.contains(7)); // false
 
-        // Test: Enthält 9?
         System.out.println("Enthält 9? " + bit.contains(9)); // true
 
-        // Lösche Wurzel (5)
         System.out.println("Lösche 5...");
         bit.delete(5);
         System.out.println("Enthält 5? " + bit.contains(5)); // false
