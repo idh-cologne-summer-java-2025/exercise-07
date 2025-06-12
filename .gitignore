@@ -1,1 +1,7 @@
 /bin/
+/classes/
+# IntelliJ Files
+/.idea/
+*.iml
+
+
