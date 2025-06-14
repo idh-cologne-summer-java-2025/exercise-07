@@ -76,14 +76,30 @@ public class BinaryIntegerTree {
 					this.right = null;
 					return true;
 				} else {
-					right.delete(value);
+					right.delete(value); //if targetNode is not the this node, nor are his children --> repeat
 				}if(value==left.value && left.right == null && left.left == null) {
 					this.left = null;
 					return true;
 				}else {
-					left.delete(value);
+					left.delete(value);//if targetNode is not the this node, nor are his children --> repeat
 				}
 //TODO:				Target node has 1 child
+				if(value==this.value && this.right != null || this.left != null) {
+					if(this.left!=null) {
+					this.value = left.value;
+					left.left = null;
+					return true;
+					} else {
+						this.value = right.value;
+						this.right = null;
+						return true;
+					} 
+				}	else {
+					if(this.right !=null) {
+						right.delete(value);
+					} else { left.delete(value);
+					
+				}
 			}		
 			return false;
 		}
