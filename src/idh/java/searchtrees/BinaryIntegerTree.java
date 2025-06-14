@@ -101,10 +101,10 @@ public class BinaryIntegerTree {
 					
 				}
 			}		
-			return false;
 		}
+			return false;
 	}
-
+	}
 	/**
 	 * Die Wurzel des Baums
 	 */
@@ -151,5 +151,4 @@ public class BinaryIntegerTree {
 		//TODO: Implement
 		return false;
 	}
-
-}
+	}
