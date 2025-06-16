@@ -17,17 +17,26 @@ public class BITApplication {
 		
 		System.out.println(bit.contains(7)); // sollte true sein
 		
+
 		// Löschen eines Knotens
 		bit.delete(7);
+
 		
+		System.out.println();		
+
 		System.out.println(bit.contains(7)); // sollte nun false sein
 		System.out.println(bit.contains(9)); // sollte noch true sein
+
+		bit.printInOrder(); // sollte 1 2 5 6 9 sein
+		System.out.println();
 		
 		// Jetzt Probe auf's Exempel: Löschen der Wurzel
 		bit.delete(5);
 		
 		System.out.println(bit.contains(5)); // sollte nun false sein
 		System.out.println(bit.contains(9)); // sollte noch true sein
+
+		bit.printInOrder(); // sollte 1 2 6 9 sein
 
 	}
 }

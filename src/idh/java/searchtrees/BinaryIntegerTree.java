@@ -54,6 +54,16 @@ public class BinaryIntegerTree {
             }
         }
 
+        public void printPreOrder() {
+            System.out.print(value + " ");
+            if (left != null) {
+                left.printPreOrder();
+            }
+            if (right != null) {
+                right.printPreOrder();
+            }
+        }
+
 		public boolean contains(int searchValue) {
             if (searchValue == value) {
                 return true;
@@ -64,9 +74,52 @@ public class BinaryIntegerTree {
             }
         }
 		
-		public boolean delete(int value) {
-			//TODO: Implement
+		public boolean delete(int valueToDelete, BinaryIntegerTreeNode parent) {
+			if(valueToDelete < value) {
+				return left.delete(valueToDelete, this);
+			}
+			if(valueToDelete > value) {
+				return right.delete(valueToDelete, this);
+			}
+			if(valueToDelete == value) {
+				if(left == null && right == null) {
+					if(parent.left == this) {
+						parent.left = null;
+					} else {
+						parent.right = null;
+					}
+					return true;
+				}
+				if(left == null) {
+					if(parent.left == this) {
+						parent.left = right;
+					} else {
+						parent.right = right;
+					}
+					return true;
+				}
+				if(right == null) {
+					if(parent.left == this) {
+						parent.left = left;
+					} else {
+						parent.right = left;
+					}
+					return true;
+				}
+				int minValue = findMinValue(right);
+				value = minValue; // Wert ersetzen
+				right.delete(minValue, this); // Kleinstes Element löschen
+				return true;
+			}
+
 			return false;
+		}
+
+		private int findMinValue(BinaryIntegerTreeNode node) {
+			if (node.left == null) {
+				return node.value;
+			}
+			return findMinValue(node.left);
 		}
 	}
 
@@ -101,6 +154,14 @@ public class BinaryIntegerTree {
         }
     }
 
+    public void printPreOrder() {
+        if (root != null) {
+            root.printPreOrder();
+        } else {
+            System.out.println("Der Baum ist leer.");
+        }
+    }
+
 	/**
 	 * Überprüft, ob der spezifizierte Wert enthalten ist.
 	 */
@@ -113,8 +174,39 @@ public class BinaryIntegerTree {
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
 	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
-	}
+        if (root == null) {
+            return false; 
+        }
+        if (root.value == value) {
+            if (root.left == null && root.right == null) {
+                root = null;
+                return true;
+            }
+            else if (root.left == null) {
+                root = root.right;
+                return true;
+            }
+            else if (root.right == null) {
+                root = root.left;
+                return true;
+            }
+            else {
+                int minValue = findMin(root.right);
+                root.value = minValue;
+                root.right.delete(minValue, root);
+                return true;
+            }
+        }
+        return root.delete(value, root);
+    }
+
+    private int findMin(BinaryIntegerTreeNode node) {
+        int minValue = node.value;
+        while (node.left != null) {
+            node = node.left;
+            minValue = node.value;
+        }
+        return minValue;
+    }
 
 }
