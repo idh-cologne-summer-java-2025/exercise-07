@@ -113,8 +113,63 @@ public class BinaryIntegerTree {
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
 	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
+	    root = deleteRec(root, value);
+	    return root != null;
+	}
+
+	private BinaryIntegerTreeNode deleteRec(BinaryIntegerTreeNode root, int value) {
+	    if (root == null) {
+	        return null;
+	    }
+
+	    // Traverse the tree to find the node to delete
+	    if (value < root.value) {
+	        root.left = deleteRec(root.left, value);
+	    } else if (value > root.value) {
+	        root.right = deleteRec(root.right, value);
+	    } else {
+	        // Node to be deleted found
+
+	        // Case 1: No child (leaf node)
+	        if (root.left == null && root.right == null) {
+	            return null;
+	        }
+
+	        // Case 2: One child
+	        if (root.left == null) {
+	            return root.right;
+	        } else if (root.right == null) {
+	            return root.left;
+	        }
+
+	        // Case 3: Two children
+	        // Find the in-order successor (smallest value in the right subtree)
+	        root.value = findMin(root.right);
+	        // Delete the in-order successor
+	        root.right = deleteRec(root.right, root.value);
+	    }
+
+	    return root;
+	}
+
+	private int findMin(BinaryIntegerTreeNode root) {
+	    int minValue = root.value;
+	    while (root.left != null) {
+	        root = root.left;
+	        minValue = root.value;
+	    }
+	    return minValue;
+	}
+
+	// Node class
+	class Node {
+	    int value;
+	    Node left, right;
+
+	    Node(int value) {
+	        this.value = value;
+	        left = right = null;
+	    }
 	}
 
 }
