@@ -28,6 +28,8 @@ public class BITApplication {
 		
 		System.out.println(bit.contains(5)); // sollte nun false sein
 		System.out.println(bit.contains(9)); // sollte noch true sein
+		
+		bit.printInOrder();
 
 	}
 }

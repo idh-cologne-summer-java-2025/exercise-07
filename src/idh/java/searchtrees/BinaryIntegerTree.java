@@ -1,207 +1,208 @@
 package idh.java.searchtrees;
 
+/**
+ * Klasse zum Speichern von int-Werten in einem sortierten Binärbaum
+ */
 public class BinaryIntegerTree {
 
-    class BinaryIntegerTreeNode {
-        int value;
-        BinaryIntegerTreeNode left, right;
+	/**
+	 * Innere Klasse, die einen int-Binärbaumknoten repräsentiert
+	 */
+	class BinaryIntegerTreeNode {
 
-        BinaryIntegerTreeNode(int value) {
-            this.value = value;
-        }
-        
+		public BinaryIntegerTreeNode(int value) {
+			this.value = value;
+		}
 
-        boolean addValue(int newValue) {
-            if (newValue == value) return false;
-            if (newValue < value) {
-                if (left == null) left = new BinaryIntegerTreeNode(newValue);
-                else return left.addValue(newValue);
-            } else {
-                if (right == null) right = new BinaryIntegerTreeNode(newValue);
-                else return right.addValue(newValue);
+		BinaryIntegerTreeNode left;
+		BinaryIntegerTreeNode right;
+		int value;
+
+		/**
+		 * Rekursive Methode für das Hinzufügen von int-Werten
+		 * 
+		 * @param value int-Wert
+		 * @return true, wenn Wert hinzugefügt wurde, false, wenn er schon vorhandem war
+		 */
+		public boolean addValue(int newValue) {
+            if (newValue == value) {
+                return false; // Wert bereits vorhanden
+            } else if (newValue < value) {
+                if (left == null) {
+                    left = new BinaryIntegerTreeNode(newValue);
+                    return true;
+                } else {
+                    return left.addValue(newValue);
+                }
+            } else { // newValue > value
+                if (right == null) {
+                    right = new BinaryIntegerTreeNode(newValue);
+                    return true;
+                } else {
+                    return right.addValue(newValue);
+                }
             }
-            return true;
         }
 
-        void printInOrder() {
-            if (left != null) left.printInOrder();
+        public void printInOrder() {
+            if (left != null) {
+                left.printInOrder();
+            }
             System.out.print(value + " ");
-            if (right != null) right.printInOrder();
+            if (right != null) {
+                right.printInOrder();
+            }
         }
 
-        boolean contains(int searchValue) {
-            if (searchValue == value) return true;
-            return (searchValue < value ? left : right) != null
-                && (searchValue < value ? left : right).contains(searchValue);
+		public boolean contains(int searchValue) {
+            if (searchValue == value) {
+                return true;
+            } else if (searchValue < value) {
+                return (left != null) && left.contains(searchValue);
+            } else {
+                return (right != null) && right.contains(searchValue);
+            }
         }
+		
+		BinaryIntegerTreeNode delete(int val) {
+		    
+// ----------------- if value is in the left subtree (the smaller side) -----------------
+			
+		    if (val < value) {
+		        if (left != null) {
+		            /**
+		             * Continue searching in the left subtree recursively.
+		             * We must update the left child reference, because the structure
+		             * of the subtree might change after deletion.
+		             */
+		            left = left.delete(val);
+		        }
+		        return this; // return current node unchanged
+		    }
+		    
+// ----------------- if value is in the right subtree -----------------------------------
+		    else if (val > value) {
+		        if (right != null) {
+		            /**
+		             * Continue searching in the right subtree recursively.
+		             * Again, we must reassign the right child in case the subtree structure changes.
+		             */
+		            right = right.delete(val);
+		        }
+		        return this; // return current node unchanged
+		    }
 
-        boolean delete(int val) {
-        	
- // ----------------- if in left tree --------
-        	// The value to delete is smaller, so we look in the left subtree,
-    	    // since by BST rules all smaller values go left.
-        	if (val < value) {
-        	    if (left == null) {
-        	        // Left subtree doesn’t exist, so the value isn’t in the tree.
-        	        // Stop searching here and return false.
-        	        return false;
-        	    }
-        	    if (left.value == val) {
-        	        // We found the node to delete as the left child of current node.
-        	        // Now handle deletion based on how many children this node has.
+// ----------------- the to be deleted value == current node value → delete this node ---
+		    else {
+		    	
+		        // Case 1 + 2: No left subtree or no subtree at all
+		        if (left == null) {
+		            /**
+		             * No left child means we can safely replace this node
+		             * with its right subtree (which may be null, which covers the first case at once!) 
+		             * This handles leaf nodes too, since both children would be null.
+		             */
+		            return right;
+		        }
 
-        	        if (left.left == null) {
-        	            /* Case 1: No left child,
-        	            * safe to replace node by its right subtree.
-        	            * This works because all right subtree values are greater than deleted node.
-        	            * Btw this also handles the case if the to be deleted node is a leaf! 
-        	            * if the left is null, the node will be overwritten with the right subtree which is also null in this case!
-        	            * so the node is just deleted. */
-        	            left = left.right;  
-        	        } 
-        	        
-        	        else if (left.right == null) {
-        	            /* Case 2: No right child,
-        	            * replace node by its left subtree,
-        	            *preserving BST property since all left subtree values are smaller.*/
-        	            left = left.left;   
-        	        }
-        	        
-        	        else {
-        	        	/* case 3:
-        	        	 * Start from the right child of the left subtree node to delete,
-        	        	 * because the successor (next larger value) is the smallest node
-        	        	 * in that right subtree. (which contains the bigger values)
-        	        	 */
-        	        	BinaryIntegerTreeNode min = left.right;
-        	        	/* 
-        	        	 * Traverse down to the leftmost child of this right subtree to find the smallest value.
-        	        	 * In a BST, left children are always smaller, so going left as far as possible
-        	        	 * finds the minimum node.
-        	        	 */
-        	        	while (min.left != null) {
-        	        	    min = min.left; /* Move one step further left */
-        	        	}
-        	        	/* 
-        	        	 * Now 'min' points to the smallest node in the right subtree of the left child,
-        	        	 * which is the inorder successor of the node we want to delete.
-        	        	 * We use its value to replace the deleted node's value later,
-        	        	 * preserving the binary search tree ordering.
-        	        	 */
+		        // Case 1 + 2: No right subtree or no subtree at all)
+		        if (right == null) {
+		            /**
+		             * No right child means we can safely replace this node
+		             * with its left subtree (or null)
+		             */
+		            return left;
+		        }
 
-        	            // Replace the value of the node to delete with successor's value,
-        	            // keeping the BST structure correct.
-        	            left.value = min.value;
-        	            // Now delete the successor node, which we just copied,
-        	            // from the right subtree recursively.
-        	            // The successor node has at most one child, so it´s easier to delete.
-        	            left.delete(min.value);
-        	        }
-        	        return true;
-        	    }
-        	    // If the node to delete is not found at the left child,
-        	    // continue searching the left subtree recursively.
-        	    return left.delete(val);
-        	    
-  // ------------------ if in right tree --------------
-        	    
-        	    //Mirror of above logic for the right subtree.
-        	    //Value to delete is greater, so check the right subtree.
-        	} else if (val > value) {
-        	    if (right == null) {
-        	        // Right subtree empty, the value is not found here.
-        	        return false;
-        	    }
-        	    if (right.value == val) {
-        	        // if the Node to delete was found as right child.
-        	        if (right.left == null) {
-        	            // case 1: replace node by its right subtree. 
-        	            right = right.right;
-        	        } else if (right.right == null) {
-        	            // case 2: replace node by its left subtree.
-        	            right = right.left;
-        	        } else {
-        	            /* case 3:
-        	             * Start from the right child of the node to delete, because 
-        	             * the successor (next larger value) is the smallest node 
-        	             * in the right subtree. (which contains the bigger values)
-        	             */
-        	            BinaryIntegerTreeNode min = right.right;
-        	            /* 
-        	             * Traverse down to the leftmost child of this subtree to find the smallest value.
-        	             * In a BST, left children are always smaller, so going left as far as possible
-        	             * finds the minimum node.
-        	             */
-        	            while (min.left != null) {
-        	                min = min.left; /* Move one step further left */
-        	            }
-        	            /* 
-        	             * Now 'min' points to the smallest node in the right subtree,
-        	             * which is the inorder successor of the node we want to delete.
-        	             * We use its value to replace the deleted node's value later,
-        	             * preserving the binary search tree ordering.
-        	             */
-        	            
-        	            // Replace the value of the node to delete with successor's value,
-        	            // keeping the BST structure correct.
-        	            right.value = min.value;
-        	            /* Now delete the successor node, which we just copied,
-        	            * from the right subtree recursively.
-        	            * The successor node has at most one child, so it´s easier to delete.*/
-        	            right.delete(min.value);
-        	        }
-        	        return true;
-        	    }
-        	    // Continue searching right subtree recursively if node not found here
-        	    return right.delete(val);
-        	}
-        	return false;
-    }
-}
+		        /**
+		         * Case 3: Two Children
+		         * We now have to handle the case where both left and right children exist.
+		         * For that we find the in order successor, which is the smallest node
+		         * in the right subtree (so the the next greater value).
+		         */
+		        BinaryIntegerTreeNode min = right;
+		        while (min.left != null) {
+		            min = min.left;  // move as far left as possible to find the minimum of the right subtree.
+		        }
 
-    private BinaryIntegerTreeNode root;
+		        /**
+		         * Replace the current node's value with the inorder successor's value.
+		         * This keeps the binary search tree property intact.
+		         */
+		        value = min.value;
 
-    public boolean addValue(int value) {
-        if (root == null) root = new BinaryIntegerTreeNode(value);
-        else return root.addValue(value);
-        return true;
+		        /**
+		         * Now we have a duplicate of the successor node.
+		         * We remove the original successor node from the right subtree.
+		         * Since the successor node has at most one child (because it's the smallest node in that subtree), it's easy to remove:
+                 * = if it has no children: it's a leaf → delete it.
+                 * = if it has one child: bypass it by pointing its parent to its child.
+		         */
+		        right = right.delete(min.value);
+
+		        return this; // return updated node
+		    }
+		}
+
+	}
+
+	/**
+	 * Die Wurzel des Baums
+	 */
+	private BinaryIntegerTreeNode root;
+
+	/**
+	 * Methode für das Hinzufügen von int-Werten in den Baum
+	 * 
+	 * @param value int-Wert
+	 * @return true, wenn Wert hinzugefügt wurde, false, wenn er schon vorhandem war
+	 */
+	public boolean addValue(int value) {
+        if (root == null) {
+            root = new BinaryIntegerTreeNode(value);
+            return true;
+        } else {
+            return root.addValue(value);
+        }
     }
 
-    public void printInOrder() {
-        if (root != null) root.printInOrder();
-        else System.out.println("Der Baum ist leer.");
+	/**
+	 * Soll den Baum in der sortierten Reihenfolge ausgeben
+	 */
+	public void printInOrder() {
+        if (root != null) {
+            root.printInOrder();
+        } else {
+            System.out.println("Der Baum ist leer.");
+        }
     }
 
-    public boolean contains(int value) {
+	/**
+	 * Überprüft, ob der spezifizierte Wert enthalten ist.
+	 */
+	public boolean contains(int value) {
         return root != null && root.contains(value);
     }
+	
+	
+	/**
+	 * Löscht den übergebenen Wert aus dem Baum.
+	 */
+	public boolean delete(int val) {
+	    if (root == null) return false;
 
-    public boolean delete(int value) {
-        if (root == null) return false; // No nodes to delete in an empty tree
-        
-// ----------- root is to be deleted --------- (note: the code works just like above)
-     
-        if (root.value == value) // This handles the special case: the root is the node to delete!
-        {                        
-            if (root.left == null) // root has no left child: replace root with right subtree
-            {
-            	// case 1
-            	root = root.right;
-            }  else if (root.right == null) { // root has no right child: replace root with left subtree
-            	// case 2
-            	root = root.left; 
-            } else { 
-            	// case 3
-                BinaryIntegerTreeNode min = root.right;  // find smallest node in right subtree (successor)
-                while (min.left != null) 
-                {
-                	min = min.left; // Move left to find the smallest value in the right subtree
-                }
-                root.value = min.value;
-                root.delete(min.value);
-            }
-            return true; // Deletion done for the root node! Only the root node!
-        }
-        return root.delete(value); // Delegate deletion of non-root nodes recursively! -> So if the deleted node is not the root!
-    }
+	    
+	    //Check if the value exists in the tree before deleting.
+	    if (!contains(val)) return false;
+
+	    /**
+	     * Start deletion from the root. The root reference may be updated,
+	     * especially if the root node itself is being deleted. The delete method
+	     * in the node returns the updated subtree after deletion.
+	     */
+	    root = root.delete(val);
+
+	    return true;
+	}
+
 }
