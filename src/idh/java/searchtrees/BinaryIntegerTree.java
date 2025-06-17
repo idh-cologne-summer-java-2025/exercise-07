@@ -64,9 +64,27 @@ public class BinaryIntegerTree {
             }
         }
 		
-		public boolean delete(int value) {
-			//TODO: Implement
-			return false;
+		public BinaryIntegerTreeNode delete(int value) {
+			if (value == this.value) {
+				if (left ==null && right ==null) return null;
+				else if (left == null) return right;
+				else if (right == null) return left;
+				else {
+					BinaryIntegerTreeNode minimumNode = right;
+					while (minimumNode.left != null) {
+						minimumNode = minimumNode.left;
+					} 
+					this.value = minimumNode.value;
+					minimumNode.delete(this.value);
+				}
+			}
+			else if (value < this.value) {
+				left = left.delete(value);
+			}
+			else if (value > this.value) {
+				right = right.delete(value);
+			}
+			return this;
 		}
 	}
 
@@ -109,12 +127,13 @@ public class BinaryIntegerTree {
     }
 	
 	
-	/**
-	 * Löscht den übergebenen Wert aus dem Baum.
-	 */
+	
+	  //Löscht den übergebenen Wert aus dem Baum.
+	 
 	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
+		if (root == null || !contains(value)) return false;
+		else root.delete(value);
+		return true;
 	}
 
 }
