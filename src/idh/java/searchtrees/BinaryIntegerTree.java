@@ -64,11 +64,30 @@ public class BinaryIntegerTree {
             }
         }
 		
-		public boolean delete(int value) {
-			//TODO: Implement
-			return false;
-		}
-	}
+	    BinaryIntegerTreeNode deleteNode(int val) {
+	        if (val < value) {
+	            left = left.deleteNode(val); // Search in the left subtree
+	        } else if (val > value) {
+	            right = right.deleteNode(val); // Search in the right subtree
+	        } else {
+	            // Node to be deleted found
+	            if (left == null) {
+	                return right; // Replace with right child if left is null
+	            } else if (right == null) {
+	                return left; // Replace with left child if right is null
+	            }
+	            // Node with two children: Get the in-order successor (smallest in the right subtree)
+	            BinaryIntegerTreeNode min = right;
+	            while (min.left != null) {
+		            min = min.left;  // move as far left as possible to find the minimum of the right subtree.
+		        }
+               	value = min.value;
+ 	            // Replace with right child
+	            right = right.deleteNode(min.value);
+	        }
+	        return this;
+	    }
+}	
 
 	/**
 	 * Die Wurzel des Baums
@@ -99,6 +118,7 @@ public class BinaryIntegerTree {
         } else {
             System.out.println("Der Baum ist leer.");
         }
+        System.out.println();
     }
 
 	/**
@@ -112,9 +132,14 @@ public class BinaryIntegerTree {
 	/**
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
-	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
-	}
-
+	 public boolean delete(int value) {
+	        if (root == null) {
+	            return false; // Tree is empty
+	        }
+	        if (!contains(value)) {
+	        	return false; // Element is not in the tree
+	        }
+	        root.deleteNode(value);
+	        return true;    
+    }
 }
