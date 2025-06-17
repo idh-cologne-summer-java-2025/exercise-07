@@ -64,32 +64,28 @@ public class BinaryIntegerTree {
             }
         }
 		
-		BinaryIntegerTreeNode delete(int val) {
+		public BinaryIntegerTreeNode deleteNode(int val) {
 		    
 // ----------------- if value is in the left subtree (the smaller side) -----------------
 			
 		    if (val < value) {
-		        if (left != null) {
 		            /**
 		             * Continue searching in the left subtree recursively.
 		             * We must update the left child reference, because the structure
 		             * of the subtree might change after deletion.
 		             */
-		            left = left.delete(val);
-		        }
-		        return this; // return current node unchanged
+		            left = left.deleteNode(val);
+		       
 		    }
 		    
 // ----------------- if value is in the right subtree -----------------------------------
 		    else if (val > value) {
-		        if (right != null) {
 		            /**
 		             * Continue searching in the right subtree recursively.
 		             * Again, we must reassign the right child in case the subtree structure changes.
 		             */
-		            right = right.delete(val);
-		        }
-		        return this; // return current node unchanged
+		            right = right.deleteNode(val);
+		        
 		    }
 
 // ----------------- the to be deleted value == current node value → delete this node ---
@@ -138,10 +134,11 @@ public class BinaryIntegerTree {
                  * = if it has no children: it's a leaf → delete it.
                  * = if it has one child: bypass it by pointing its parent to its child.
 		         */
-		        right = right.delete(min.value);
+		        right = right.deleteNode(min.value);
 
-		        return this; // return updated node
+		        
 		    }
+		    return this; // return updated node
 		}
 
 	}
@@ -200,7 +197,7 @@ public class BinaryIntegerTree {
 	     * especially if the root node itself is being deleted. The delete method
 	     * in the node returns the updated subtree after deletion.
 	     */
-	    root = root.delete(val);
+	    root.deleteNode(val);
 
 	    return true;
 	}
