@@ -1,5 +1,5 @@
 package idh.java.searchtrees;
-
+//seems like my JRE is too old (not compatible class file compatibility: 21)
 public class BITApplication {
 
 	public static void main(String[] args) {
