@@ -24,6 +24,7 @@ public class BinaryIntegerTree {
 		 * @param value int-Wert
 		 * @return true, wenn Wert hinzugefügt wurde, false, wenn er schon vorhandem war
 		 */
+		
 		public boolean addValue(int newValue) {
             if (newValue == value) {
                 return false; // Wert bereits vorhanden
@@ -64,9 +65,35 @@ public class BinaryIntegerTree {
             }
         }
 		
-		public boolean delete(int value) {
+		public BinaryIntegerTreeNode delete(int value) {
 			//TODO: Implement
-			return false;
+			if(value < this.value) {
+				if (left != null) {
+					left = left.delete(value);
+				}
+			}else if (value > this.value) {
+				if (right != null) {
+					right = right.delete(value);
+				}
+			}else {
+				if (left == null && right == null) {
+					return null;
+				}
+				if (left == null) {
+					return right;
+				}
+				if (right == null) {
+					return left;
+				}
+				
+				BinaryIntegerTreeNode Nachfolger = right;
+				while (Nachfolger.left != null) {
+					Nachfolger = Nachfolger.left;
+				}
+				this.value = Nachfolger.value;
+				right = right.delete(Nachfolger.value);
+			}
+			return this;
 		}
 	}
 
@@ -114,7 +141,14 @@ public class BinaryIntegerTree {
 	 */
 	public boolean delete(int value) {
 		//TODO: Implement
-		return false;
+		if (root == null) return false;
+		
+		if (contains(value)) {
+			root =	root.delete(value);
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }
