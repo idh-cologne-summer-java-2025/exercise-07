@@ -17,6 +17,27 @@ public class BinaryIntegerTree {
 		BinaryIntegerTreeNode left;
 		BinaryIntegerTreeNode right;
 		int value;
+		public int getValue() {
+			return value;
+		}
+		public BinaryIntegerTreeNode getLeft() {
+			return left;
+		}
+		public BinaryIntegerTreeNode getRight() {
+			return right;
+		}
+		public BinaryIntegerTreeNode getBigL() {
+			if((right!=null)&&(right.getRight()==null)&&(right.getLeft()==null)) {
+				BinaryIntegerTreeNode temp = right;
+				right = null;
+				return temp;
+			}
+			else if((right!=null)) {
+				return right.getBigL();
+			}
+			else return this;
+			
+		}
 
 		/**
 		 * Rekursive Methode für das Hinzufügen von int-Werten
@@ -65,9 +86,34 @@ public class BinaryIntegerTree {
         }
 		
 		public boolean delete(int value) {
-			//TODO: Implement
+			if (!contains(value))	return false;
+			
+			  
+	               
+	        if (left.getValue() == value) {
+	           if((left.getLeft()== null)&&(left.getRight()== null)) {left=null; return true;}
+	           if((left.getLeft()!= null)&&(left.getRight()== null)) {left=left.getLeft(); return true;}
+	           if((left.getLeft()== null)&&(left.getRight()!= null)) {left=left.getRight(); return true;}
+	           if((left.getLeft()!= null)&&(left.getRight()!= null)) {
+	        	   left=left.getBigL(); 
+	        	   return true;}
+	           
+	        }  else  if (right.getValue() == value) { 
+	        	 if((right.getLeft()== null)&&(right.getRight()== null)) {right=null; return true;}
+	        	 if((right.getLeft()!= null)&&(right.getRight()== null)) {right=right.getLeft(); return true;}
+		         if((right.getLeft()== null)&&(right.getRight()!= null)) {right=right.getRight(); return true;}
+		         if((right.getLeft()!= null)&&(right.getRight()!= null)) {
+		        	   right=left.getBigL(); 
+		        	   return true;}
+	        }
+	        else{
+	            		if (left != null) return left.delete(value);
+	            		if (right != null) return right.delete(value);
+	            		
+	        }
 			return false;
 		}
+		
 	}
 
 	/**
@@ -113,7 +159,7 @@ public class BinaryIntegerTree {
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
 	public boolean delete(int value) {
-		//TODO: Implement
+		root.delete(value);
 		return false;
 	}
 
