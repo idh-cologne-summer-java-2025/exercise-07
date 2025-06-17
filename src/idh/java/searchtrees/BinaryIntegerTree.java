@@ -71,20 +71,20 @@ public class BinaryIntegerTree {
 		public boolean delete(int value) {
 			//TODO: Implement
 			if(this.contains(value)==true) { //check if tree even contains said value in the first place
-//					Target node has 0 children
-				if(value==right.value && right.right==null && right.left==null) {
+				//Target node has 0 children
+				if(value==right.value & right.right==null && right.left==null) {
 					this.right = null;
 					return true;
 				} else {
 					right.delete(value); //if targetNode is not the this node, nor are his children --> repeat
-				}if(value==left.value && left.right == null && left.left == null) {
+				}if(value==left.value & left.right == null && left.left == null) {
 					this.left = null;
 					return true;
 				}else {
 					left.delete(value);//if targetNode is not the this node, nor are his children --> repeat
 				}
-//TODO:				Target node has 1 child
-				if(value==this.value && this.right != null || this.left != null) {
+//				Target node has 1 child
+				if(value==this.value & this.right != null || this.left != null) {
 					if(this.left!=null) {
 					this.value = left.value;
 					left.left = null;
@@ -97,10 +97,14 @@ public class BinaryIntegerTree {
 				}	else {
 					if(this.right !=null) {
 						right.delete(value);
-					} else { left.delete(value);
+					} else { 
+						left.delete(value);
+				}
+			}
+//				TODO:Target Node has 2 children
+				if(this.value == value && this.right != null & this.left != null) {
 					
 				}
-			}		
 		}
 			return false;
 	}
@@ -140,15 +144,23 @@ public class BinaryIntegerTree {
 	 * Überprüft, ob der spezifizierte Wert enthalten ist.
 	 */
 	public boolean contains(int value) {
-        return root != null && root.contains(value);//but what does .contain by itself do?
+        return root != null && root.contains(value);//but what does .contains by itself do?
     }
 	
 	
 	/**
-	 * Löscht den übergebenen Wert aus dem Baum.
+	 * Löscht den übergebenen Wert aus dem Baum. --> supposed to delete the root node..., 
 	 */
 	public boolean delete(int value) { //Why does the BIT itself also possess a delete method that is supposed to delete a single value?
 		//TODO: Implement
+		if(root == null) {
+			return false;
+		}
+		if(!contains(value))
 		return false;
+		
+		root = root.delete(value);
+		return true;
 	}
+	
 	}
