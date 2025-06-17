@@ -31,3 +31,8 @@ public class BITApplication {
 
 	}
 }
+
+//Leider gibt es Schwierigkeiten die Ausgabe zu sehen, da ein Error besteht: 
+//Error: Could not find or load main class idh.java.BITApplication
+//Caused by: java.lang.ClassNotFoundException: idh.java.BITApplication
+//Ich habe jetzt sehr lange versucht das zu beheben aber leider keine Lösung gefunden
