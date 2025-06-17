@@ -159,7 +159,7 @@ public class BinaryIntegerTree {
 		if(!contains(value))
 		return false;
 		
-		root = root.delete(value);
+		root.delete(value);
 		return true;
 	}
 	
