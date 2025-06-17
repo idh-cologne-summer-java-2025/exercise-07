@@ -76,7 +76,7 @@ public class BinaryIntegerTree {
 					this.right = null;
 					return true;
 				} else {
-					right.delete(value); //if targetNode is not the this node, nor are his children --> repeat
+					right.delete(value); //if targetNode is not the current node, nor are his children --> repeat
 				}if(value==left.value & left.right == null && left.left == null) {
 					this.left = null;
 					return true;
