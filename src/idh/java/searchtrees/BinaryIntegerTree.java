@@ -64,11 +64,34 @@ public class BinaryIntegerTree {
             }
         }
 		
-		public boolean delete(int value) {
-			//TODO: Implement
-			return false;
+		public BinaryIntegerTreeNode delete(int value) {
+			if (value < this.value) {
+				if (left != null) left = left.delete(value);
+			} else if (value > this.value) {
+				if (right != null) right = right.delete(value);
+			} else {
+				// Knoten gefunden
+				if (left == null && right == null) {
+					return null; //  Kein Kind
+				} else if (left == null) {
+					return right; //  Nur rechtes Kind
+				} else if (right == null) {
+					return left; //  Nur linkes Kind
+				} else {
+					// Zwei Kinder
+					BinaryIntegerTreeNode successor = right.findMin();
+					this.value = successor.value;
+					right = right.delete(successor.value);
+				}
+			}
+			return this;
+		}
+
+		private BinaryIntegerTreeNode findMin() {
+			return (left == null) ? this : left.findMin();
 		}
 	}
+
 
 	/**
 	 * Die Wurzel des Baums
@@ -112,9 +135,10 @@ public class BinaryIntegerTree {
 	/**
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
-	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
+	public boolean deleteFromTree(int value) {
+		if (!contains(value)) return false;
+		root = root.delete(value);
+		return true;
 	}
 
 }
