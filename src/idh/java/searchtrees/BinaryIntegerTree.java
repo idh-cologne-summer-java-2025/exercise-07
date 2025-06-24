@@ -1,32 +1,19 @@
 package idh.java.searchtrees;
 
-/**
- * Klasse zum Speichern von int-Werten in einem sortierten Binärbaum
- */
 public class BinaryIntegerTree {
 
-	/**
-	 * Innere Klasse, die einen int-Binärbaumknoten repräsentiert
-	 */
-	class BinaryIntegerTreeNode {
+    class BinaryIntegerTreeNode {
+        BinaryIntegerTreeNode left;
+        BinaryIntegerTreeNode right;
+        int value;
 
-		public BinaryIntegerTreeNode(int value) {
-			this.value = value;
-		}
+        public BinaryIntegerTreeNode(int value) {
+            this.value = value;
+        }
 
-		BinaryIntegerTreeNode left;
-		BinaryIntegerTreeNode right;
-		int value;
-
-		/**
-		 * Rekursive Methode für das Hinzufügen von int-Werten
-		 * 
-		 * @param value int-Wert
-		 * @return true, wenn Wert hinzugefügt wurde, false, wenn er schon vorhandem war
-		 */
-		public boolean addValue(int newValue) {
+        public boolean addValue(int newValue) {
             if (newValue == value) {
-                return false; // Wert bereits vorhanden
+                return false;
             } else if (newValue < value) {
                 if (left == null) {
                     left = new BinaryIntegerTreeNode(newValue);
@@ -34,7 +21,7 @@ public class BinaryIntegerTree {
                 } else {
                     return left.addValue(newValue);
                 }
-            } else { // newValue > value
+            } else {
                 if (right == null) {
                     right = new BinaryIntegerTreeNode(newValue);
                     return true;
@@ -44,44 +31,85 @@ public class BinaryIntegerTree {
             }
         }
 
-        public void printInOrder() {
-            if (left != null) {
-                left.printInOrder();
-            }
-            System.out.print(value + " ");
-            if (right != null) {
-                right.printInOrder();
-            }
-        }
-
-		public boolean contains(int searchValue) {
-            if (searchValue == value) {
-                return true;
-            } else if (searchValue < value) {
-                return (left != null) && left.contains(searchValue);
+        public boolean delete(int value) {
+            if (value < this.value) {
+                if (left != null) {
+                    if (left.value == value) {
+                                                if (left.left == null) {
+                            left = left.right;
+                        } else if (left.right == null) {
+                            left = left.left;
+                        } else {
+                            BinaryIntegerTreeNode maxNode = left.left;
+                            while (maxNode.right != null) {
+                                maxNode = maxNode.right;
+                            }
+                            this.value = maxNode.value;
+                            left.left.delete(maxNode.value);                         }
+                        return true;
+                    } else {
+                        return left.delete(value);
+                    }
+                }
+            } else if (value > this.value) {
+                if (right != null) {
+                    if (right.value == value) {
+                        if (right.left == null && right.right == null) {
+                            right = null;
+                        } else if (right.left == null) {
+                            right = right.right;
+                        } else if (right.right == null) {
+                            right = right.left;
+                        } else {
+                            BinaryIntegerTreeNode minNode = right.right;
+                            while (minNode.left != null) {
+                                minNode = minNode.left;
+                            }
+                                                        right.value = minNode.value;
+                            right.right.delete(minNode.value);
+                        }
+                        return true;
+                    } else {
+                        return right.delete(value);
+                    }
+                }
             } else {
-                return (right != null) && right.contains(searchValue);
+                if (left == null && right == null) {
+                    return false;
+                }
+                if (left == null) {
+                    this.value = right.value;
+                    this.right = right.right;
+                    this.left = right.left;
+                } else if (right == null) {
+                    this.value = left.value;
+                    this.left = left.left;
+                    this.right = left.right;
+                } else {
+                    BinaryIntegerTreeNode minNode = right;
+                    while (minNode.left != null) {
+                        minNode = minNode.left;
+                    }
+                    this.value = minNode.value;
+                    right.delete(minNode.value);
+                }
+                return true;
             }
+            return false;
         }
-		
-		public boolean delete(int value) {
-			//TODO: Implement
-			return false;
-		}
-	}
+    }
 
-	/**
-	 * Die Wurzel des Baums
-	 */
-	private BinaryIntegerTreeNode root;
+    private BinaryIntegerTreeNode root;
 
-	/**
-	 * Methode für das Hinzufügen von int-Werten in den Baum
-	 * 
-	 * @param value int-Wert
-	 * @return true, wenn Wert hinzugefügt wurde, false, wenn er schon vorhandem war
-	 */
-	public boolean addValue(int value) {
+    public boolean delete(int value) {
+        if (root == null) {
+            return false;
+        } else {
+                        return root.delete(value);
+        }
+    }
+
+        public boolean addValue(int value) {
         if (root == null) {
             root = new BinaryIntegerTreeNode(value);
             return true;
@@ -89,32 +117,4 @@ public class BinaryIntegerTree {
             return root.addValue(value);
         }
     }
-
-	/**
-	 * Soll den Baum in der sortierten Reihenfolge ausgeben
-	 */
-	public void printInOrder() {
-        if (root != null) {
-            root.printInOrder();
-        } else {
-            System.out.println("Der Baum ist leer.");
-        }
-    }
-
-	/**
-	 * Überprüft, ob der spezifizierte Wert enthalten ist.
-	 */
-	public boolean contains(int value) {
-        return root != null && root.contains(value);
-    }
-	
-	
-	/**
-	 * Löscht den übergebenen Wert aus dem Baum.
-	 */
-	public boolean delete(int value) {
-		//TODO: Implement
-		return false;
-	}
-
 }
