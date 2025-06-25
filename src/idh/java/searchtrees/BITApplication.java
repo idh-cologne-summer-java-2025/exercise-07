@@ -13,6 +13,7 @@ public class BITApplication {
 		bit.addValue(2);
 		bit.addValue(1);
 
+		
 		bit.printInOrder();
 		
 		System.out.println(bit.contains(7)); // sollte true sein
