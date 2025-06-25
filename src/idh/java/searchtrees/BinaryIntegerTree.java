@@ -64,7 +64,7 @@ public class BinaryIntegerTree {
             }
         }
 		
-		BinaryIntegerTreeNode delete(int val) {
+		BinaryIntegerTreeNode deleteNode(int val) {
 		    
 // ----------------- if value is in the left subtree (the smaller side) -----------------
 			
@@ -75,7 +75,7 @@ public class BinaryIntegerTree {
 		             * We must update the left child reference, because the structure
 		             * of the subtree might change after deletion.
 		             */
-		            left = left.delete(val);
+		            left = left.deleteNode(val);
 		        }
 		        return this; // return current node unchanged
 		    }
@@ -87,7 +87,7 @@ public class BinaryIntegerTree {
 		             * Continue searching in the right subtree recursively.
 		             * Again, we must reassign the right child in case the subtree structure changes.
 		             */
-		            right = right.delete(val);
+		            right = right.deleteNode(val);
 		        }
 		        return this; // return current node unchanged
 		    }
@@ -138,7 +138,7 @@ public class BinaryIntegerTree {
                  * = if it has no children: it's a leaf → delete it.
                  * = if it has one child: bypass it by pointing its parent to its child.
 		         */
-		        right = right.delete(min.value);
+		        right = right.deleteNode(min.value);
 
 		        return this; // return updated node
 		    }
@@ -200,7 +200,7 @@ public class BinaryIntegerTree {
 	     * especially if the root node itself is being deleted. The delete method
 	     * in the node returns the updated subtree after deletion.
 	     */
-	    root = root.delete(val);
+	    root = root.deleteNode(val);
 
 	    return true;
 	}
