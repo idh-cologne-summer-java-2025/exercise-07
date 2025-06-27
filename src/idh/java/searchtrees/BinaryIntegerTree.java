@@ -112,9 +112,32 @@ public class BinaryIntegerTree {
 	/**
 	 * Löscht den übergebenen Wert aus dem Baum.
 	 */
-	public boolean delete(int value) {
+	public boolean delete1(int value) {
 		//TODO: Implement
 		return false;
+	}
+	
+	public boolean delete(int value) {
+	    root = delete(root, value);
+	    return deleted;
+	}
+
+	private boolean deleted;
+
+	private BinaryIntegerTreeNode delete(BinaryIntegerTreeNode n, int v) {
+	    if (n == null) { deleted = false; return null; }
+	    if (v < n.value) n.left = delete(n.left, v);
+	    else if (v > n.value) n.right = delete(n.right, v);
+	    else {
+	        deleted = true;
+	        if (n.left == null) return n.right;
+	        if (n.right == null) return n.left;
+	        BinaryIntegerTreeNode m = n.right;
+	        while (m.left != null) m = m.left;
+	        n.value = m.value;
+	        n.right = delete(n.right, m.value);
+	    }
+	    return n;
 	}
 
 }
