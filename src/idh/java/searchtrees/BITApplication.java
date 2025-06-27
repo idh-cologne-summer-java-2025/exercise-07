@@ -14,6 +14,7 @@ public class BITApplication {
 		bit.addValue(1);
 
 		bit.printInOrder();
+		System.out.println();
 		
 		System.out.println(bit.contains(7)); // sollte true sein
 		
@@ -26,8 +27,13 @@ public class BITApplication {
 		// Jetzt Probe auf's Exempel: Löschen der Wurzel
 		bit.delete(5);
 		
+		bit.printInOrder();
+		System.out.println();
+		
 		System.out.println(bit.contains(5)); // sollte nun false sein
 		System.out.println(bit.contains(9)); // sollte noch true sein
+		
+		
 
 	}
 }
